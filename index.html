@@ -1,8 +1,8 @@
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://lunch-what-to-eat.netlify.app/ -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>午饭老虎机</title>
     <style>
       :root {
@@ -34,9 +34,10 @@
         margin: 0;
         color: var(--text);
         background:
-          radial-gradient(circle at 18% 12%, rgba(36, 184, 232, 0.18), transparent 32%),
-          radial-gradient(circle at 82% 20%, rgba(255, 211, 61, 0.14), transparent 30%),
-          linear-gradient(135deg, #06080b 0%, #111820 46%, #090b0e 100%);
+          linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(135deg, #06080b 0%, #10171e 48%, #090b0e 100%);
+        background-size: 34px 34px, 34px 34px, auto;
       }
 
       button,
@@ -50,12 +51,12 @@
 
       .app-shell {
         display: grid;
-        grid-template-columns: minmax(0, 760px) minmax(320px, 0.75fr);
-        gap: 26px;
+        grid-template-columns: minmax(0, 760px) minmax(300px, 0.75fr);
+        gap: clamp(18px, 3vw, 28px);
         width: min(1240px, calc(100% - 32px));
         min-height: 100vh;
         margin: 0 auto;
-        padding: 40px 0;
+        padding: clamp(22px, 4vw, 40px) 0;
         align-items: center;
       }
 
@@ -242,106 +243,141 @@
       }
 
       .marquee-cell {
+        --cell-bg: linear-gradient(145deg, #fff074, #f5b52b);
+        --cell-text: #101214;
+        --cell-glow: rgba(255, 205, 64, 0.16);
+        --symbol-bg: radial-gradient(circle at 35% 30%, #fff799, #ff3a2b 55%, #a2070d);
+        --symbol-text: #ffe9ae;
         position: absolute;
+        isolation: isolate;
+        overflow: hidden;
         display: grid;
-        grid-template-rows: 1fr auto;
-        width: clamp(72px, 14.8%, 96px);
-        min-height: clamp(58px, 8.8vw, 72px);
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: 3px;
+        align-content: center;
+        width: clamp(76px, 14.8%, 98px);
+        min-height: clamp(62px, 8.8vw, 76px);
         place-items: center;
-        padding: 7px 8px;
-        border: 2px solid rgba(255, 255, 255, 0.78);
+        padding: 7px 8px 8px;
+        border: 2px solid rgba(255, 255, 255, 0.82);
         border-radius: 6px;
-        color: #081018;
-        background: linear-gradient(145deg, #f7f06b, #f2b82b);
+        color: var(--cell-text);
+        background: var(--cell-bg);
         box-shadow:
           inset 0 0 0 1px rgba(0, 0, 0, 0.18),
-          inset 0 9px 10px rgba(255, 255, 255, 0.45),
-          0 10px 18px rgba(0, 0, 0, 0.38);
-        font-size: clamp(0.72rem, 1.6vw, 0.9rem);
+          inset 0 11px 12px rgba(255, 255, 255, 0.42),
+          0 10px 18px rgba(0, 0, 0, 0.4),
+          0 0 18px var(--cell-glow);
+        font-size: clamp(0.7rem, 1.45vw, 0.88rem);
         font-weight: 900;
-        line-height: 1.05;
+        line-height: 1.08;
         text-align: center;
         transform: translate(-50%, -50%);
         transition:
-          transform 90ms ease,
-          background 90ms ease,
-          border-color 90ms ease,
-          box-shadow 90ms ease;
-        word-break: break-word;
+          transform 70ms ease,
+          border-color 70ms ease,
+          box-shadow 70ms ease,
+          filter 70ms ease;
+        overflow-wrap: anywhere;
+      }
+
+      .marquee-cell::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background:
+          linear-gradient(160deg, rgba(255, 255, 255, 0.56), transparent 32%),
+          linear-gradient(0deg, rgba(0, 0, 0, 0.12), transparent 44%);
+        pointer-events: none;
       }
 
       .marquee-cell.tone-1 {
-        background: linear-gradient(145deg, #68e773, #229a32);
+        --cell-bg: linear-gradient(145deg, #83ee85, #1e9f42);
+        --cell-text: #062a12;
+        --cell-glow: rgba(75, 232, 111, 0.2);
+        --symbol-bg: radial-gradient(circle at 35% 30%, #f0ffe8, #70e96a 58%, #128333);
+        --symbol-text: #063b18;
       }
 
       .marquee-cell.tone-2 {
-        background: linear-gradient(145deg, #55ddff, #057fb4);
-        color: #07121a;
+        --cell-bg: linear-gradient(145deg, #64dcff, #0670b7);
+        --cell-text: #061928;
+        --cell-glow: rgba(72, 204, 255, 0.22);
+        --symbol-bg: radial-gradient(circle at 35% 30%, #f6ffff, #42d0ff 58%, #0677b6);
+        --symbol-text: #083752;
       }
 
       .marquee-cell.tone-3 {
-        background: linear-gradient(145deg, #ff6b59, #c51622);
-        color: #fff8df;
+        --cell-bg: linear-gradient(145deg, #ff806d, #c51f30);
+        --cell-text: #fff8df;
+        --cell-glow: rgba(255, 86, 82, 0.2);
+        --symbol-bg: radial-gradient(circle at 35% 30%, #fff0a5, #ffb321 58%, #be4b05);
+        --symbol-text: #681800;
       }
 
       .marquee-cell.tone-4 {
-        background: linear-gradient(145deg, #fdfefe, #d9e7ef);
+        --cell-bg: linear-gradient(145deg, #f8fbff, #c8d9e6);
+        --cell-text: #121820;
+        --cell-glow: rgba(212, 229, 242, 0.18);
+        --symbol-bg: linear-gradient(#181c22, #343b44);
+        --symbol-text: #f8fbff;
+      }
+
+      .marquee-cell.tone-0 {
+        --cell-bg: linear-gradient(145deg, #fff36d, #f5b328);
+        --cell-text: #201500;
+        --cell-glow: rgba(255, 208, 64, 0.22);
+        --symbol-bg: radial-gradient(circle at 35% 30%, #fff799, #ff3a2b 55%, #a2070d);
+        --symbol-text: #ffe9ae;
       }
 
       .cell-symbol {
+        position: relative;
+        z-index: 1;
         display: grid;
-        width: 34px;
-        height: 26px;
+        width: 38px;
+        height: 27px;
         place-items: center;
         border: 2px solid rgba(0, 0, 0, 0.45);
         border-radius: 999px;
-        color: #d51414;
-        background: radial-gradient(circle at 35% 30%, #fff799, #ff3a2b 55%, #a2070d);
-        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.52);
+        color: var(--symbol-text);
+        background: var(--symbol-bg);
+        box-shadow:
+          inset 0 2px 4px rgba(255, 255, 255, 0.52),
+          0 2px 6px rgba(0, 0, 0, 0.22);
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-        font-size: 0.88rem;
+        font-size: 0.78rem;
         font-weight: 1000;
-      }
-
-      .marquee-cell.tone-1 .cell-symbol {
-        color: #096a18;
-        background: radial-gradient(circle at 35% 30%, #efffe8, #74ea31 58%, #158b24);
-      }
-
-      .marquee-cell.tone-2 .cell-symbol {
-        color: #073a5a;
-        background: radial-gradient(circle at 35% 30%, #f3ffff, #43d4ff 58%, #0878b3);
-      }
-
-      .marquee-cell.tone-3 .cell-symbol {
-        color: #671000;
-        background: radial-gradient(circle at 35% 30%, #fff2af, #ffbd18 58%, #cd5c00);
       }
 
       .marquee-cell.tone-4 .cell-symbol {
         border-radius: 4px;
-        color: #111;
-        background: linear-gradient(#111, #333);
       }
 
       .cell-name {
+        position: relative;
+        z-index: 1;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
         max-width: 100%;
         overflow: hidden;
         color: inherit;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        white-space: normal;
       }
 
       .marquee-cell.active {
         z-index: 2;
         border-color: #fff7ad;
         color: #17120a;
+        filter: saturate(1.24) brightness(1.08);
         box-shadow:
           inset 0 0 0 2px rgba(255, 255, 255, 0.75),
           0 0 0 4px rgba(255, 233, 88, 0.35),
           0 0 28px rgba(255, 232, 69, 0.95),
           0 18px 34px rgba(0, 0, 0, 0.42);
-        transform: translate(-50%, -50%) scale(1.08);
+        transform: translate(-50%, -50%) scale(1.1);
       }
 
       .board-center {
@@ -350,10 +386,10 @@
         left: 50%;
         top: 50%;
         display: grid;
-        width: min(42%, 230px);
-        min-height: 132px;
+        width: min(38%, 220px);
+        min-height: 124px;
         place-items: center;
-        padding: 16px;
+        padding: 14px;
         border: 3px solid #d8efff;
         border-radius: 8px;
         background: linear-gradient(180deg, rgba(6, 70, 125, 0.96), rgba(4, 35, 81, 0.98));
@@ -421,6 +457,7 @@
         justify-content: center;
         gap: 9px;
         flex: 0 0 auto;
+        min-width: 116px;
         padding: 0 20px;
       }
 
@@ -693,62 +730,101 @@
         }
       }
 
-      @media (max-width: 480px) {
+      @media (max-width: 560px) {
         .app-shell {
-          width: min(100% - 22px, 1180px);
+          width: min(100% - 16px, 430px);
+          gap: 14px;
+          padding: 14px 0 18px;
+        }
+
+        .title-block {
+          margin-bottom: 10px;
+        }
+
+        .subline {
+          margin-top: 8px;
+          font-size: 0.92rem;
+          line-height: 1.5;
         }
 
         .slot-glass {
-          padding: 10px;
+          padding: 8px;
+          border-width: 1px;
         }
 
         .slot-lights {
-          gap: 5px;
-          margin: 4px 42px 8px;
+          grid-template-columns: repeat(8, 1fr);
+          gap: 4px;
+          margin: 2px 16px 7px;
         }
 
         .machine-face {
-          grid-template-columns: 32px minmax(0, 1fr) 32px;
-          gap: 6px;
+          grid-template-columns: 1fr;
+          gap: 0;
         }
 
         .side-rail {
-          gap: 5px;
-          padding: 5px 3px;
+          display: none;
         }
 
-        .rail-light {
-          min-height: 30px;
-          font-size: 0.58rem;
+        .lottery-board {
+          width: 100%;
+          max-width: 420px;
         }
 
         .marquee-cell {
-          width: clamp(52px, 22%, 68px);
-          min-height: 44px;
-          padding: 5px 6px;
-          font-size: 0.66rem;
+          width: clamp(42px, 18%, 56px);
+          min-height: clamp(40px, 14vw, 52px);
+          padding: 4px 5px;
+          border-width: 1px;
+          font-size: clamp(0.58rem, 2.7vw, 0.72rem);
         }
 
         .cell-symbol {
-          width: 28px;
-          height: 20px;
-          font-size: 0.68rem;
+          width: min(34px, 100%);
+          height: 18px;
+          border-width: 1px;
+          font-size: 0.58rem;
         }
 
         .board-center {
-          width: min(46%, 142px);
-          min-height: 94px;
-          padding: 10px;
+          width: min(42%, 136px);
+          min-height: 84px;
+          padding: 8px;
+          border-width: 2px;
         }
 
         .center-status {
-          margin-bottom: 8px;
-          font-size: 0.76rem;
+          margin-bottom: 7px;
+          font-size: 0.72rem;
+        }
+
+        .spin-button {
+          width: auto;
+          min-width: 96px;
+          min-height: 40px;
+          padding: 0 14px;
+          font-size: 0.9rem;
+        }
+
+        .button-icon {
+          width: 18px;
+          height: 18px;
+        }
+
+        .slot-footer {
+          margin: 8px 0 0;
+          padding: 8px;
+        }
+
+        #winnerText {
+          font-size: 1.18rem;
         }
 
         .score-strip {
           gap: 4px;
-          margin: 8px 38px 0;
+          grid-template-columns: repeat(4, 1fr);
+          margin: 8px 20px 0;
           padding: 5px;
         }
 
@@ -805,13 +881,73 @@
               </div>
               <div class="lottery-board" id="lotteryBoard">
                 <div class="board-center">
-                  <p class="center-status" id="centerStatus">准备开饭</p>
+                  <p class="center-status" id="centerStatus">就吃这个</p>
                   <button id="spinButton" class="spin-button" type="button">
                     <span class="button-icon" aria-hidden="true">▶</span>
-                    开始抽取
+                    开始
                   </button>
                 </div>
-              </div>
+              <div class="marquee-cell tone-0 active" data-index="0" style="left: 10%; top: 10%;">
+            <span class="cell-symbol">77</span>
+            <span class="cell-name">干拌抄手</span>
+          </div><div class="marquee-cell tone-1" data-index="1" style="left: 26%; top: 10%;">
+            <span class="cell-symbol">BAR</span>
+            <span class="cell-name">牛肉刀削面</span>
+          </div><div class="marquee-cell tone-2" data-index="2" style="left: 42%; top: 10%;">
+            <span class="cell-symbol">X2</span>
+            <span class="cell-name">端菜粉蒸肉</span>
+          </div><div class="marquee-cell tone-3" data-index="3" style="left: 58%; top: 10%;">
+            <span class="cell-symbol">15</span>
+            <span class="cell-name">米线</span>
+          </div><div class="marquee-cell tone-4" data-index="4" style="left: 74%; top: 10%;">
+            <span class="cell-symbol">WIN</span>
+            <span class="cell-name">脆皮五花肉</span>
+          </div><div class="marquee-cell tone-0" data-index="5" style="left: 90%; top: 10%;">
+            <span class="cell-symbol">77</span>
+            <span class="cell-name">铁板烧</span>
+          </div><div class="marquee-cell tone-1" data-index="6" style="left: 90%; top: 26%;">
+            <span class="cell-symbol">BAR</span>
+            <span class="cell-name">猪脚饭</span>
+          </div><div class="marquee-cell tone-2" data-index="7" style="left: 90%; top: 42%;">
+            <span class="cell-symbol">X2</span>
+            <span class="cell-name">干拌抄手</span>
+          </div><div class="marquee-cell tone-3" data-index="8" style="left: 90%; top: 58%;">
+            <span class="cell-symbol">15</span>
+            <span class="cell-name">牛肉刀削面</span>
+          </div><div class="marquee-cell tone-4" data-index="9" style="left: 90%; top: 74%;">
+            <span class="cell-symbol">WIN</span>
+            <span class="cell-name">端菜粉蒸肉</span>
+          </div><div class="marquee-cell tone-0" data-index="10" style="left: 90%; top: 90%;">
+            <span class="cell-symbol">77</span>
+            <span class="cell-name">米线</span>
+          </div><div class="marquee-cell tone-1" data-index="11" style="left: 74%; top: 90%;">
+            <span class="cell-symbol">BAR</span>
+            <span class="cell-name">脆皮五花肉</span>
+          </div><div class="marquee-cell tone-2" data-index="12" style="left: 58%; top: 90%;">
+            <span class="cell-symbol">X2</span>
+            <span class="cell-name">铁板烧</span>
+          </div><div class="marquee-cell tone-3" data-index="13" style="left: 42%; top: 90%;">
+            <span class="cell-symbol">15</span>
+            <span class="cell-name">猪脚饭</span>
+          </div><div class="marquee-cell tone-4" data-index="14" style="left: 26%; top: 90%;">
+            <span class="cell-symbol">WIN</span>
+            <span class="cell-name">干拌抄手</span>
+          </div><div class="marquee-cell tone-0" data-index="15" style="left: 10%; top: 90%;">
+            <span class="cell-symbol">77</span>
+            <span class="cell-name">牛肉刀削面</span>
+          </div><div class="marquee-cell tone-1" data-index="16" style="left: 10%; top: 74%;">
+            <span class="cell-symbol">BAR</span>
+            <span class="cell-name">端菜粉蒸肉</span>
+          </div><div class="marquee-cell tone-2" data-index="17" style="left: 10%; top: 58%;">
+            <span class="cell-symbol">X2</span>
+            <span class="cell-name">米线</span>
+          </div><div class="marquee-cell tone-3" data-index="18" style="left: 10%; top: 42%;">
+            <span class="cell-symbol">15</span>
+            <span class="cell-name">脆皮五花肉</span>
+          </div><div class="marquee-cell tone-4" data-index="19" style="left: 10%; top: 26%;">
+            <span class="cell-symbol">WIN</span>
+            <span class="cell-name">铁板烧</span>
+          </div></div>
               <div class="side-rail" aria-hidden="true">
                 <span class="rail-light">77</span>
                 <span class="rail-light blue">ON</span>
@@ -834,7 +970,7 @@
             <div class="slot-footer">
               <div>
                 <span class="label">今日结果</span>
-                <strong id="winnerText">还没抽</strong>
+                <strong id="winnerText">干拌抄手</strong>
               </div>
             </div>
           </div>
@@ -842,7 +978,7 @@
 
         <div class="result-strip" id="resultStrip">
           <span>最近记录</span>
-          <div id="historyList" class="history-list"></div>
+          <div id="historyList" class="history-list"><span class="history-chip">干拌抄手</span><span class="history-chip">脆皮五花肉</span><span class="history-chip">铁板烧</span></div>
         </div>
       </section>
 
@@ -852,21 +988,13 @@
             <p class="eyebrow">Menu Pool</p>
             <h2 id="food-panel-title">候选食物</h2>
           </div>
-          <span class="count-pill" id="countPill">0 项</span>
+          <span class="count-pill" id="countPill">7 项</span>
         </div>
 
         <form class="food-form" id="foodForm">
           <label for="foodInput">添加或编辑食物</label>
           <div class="input-row">
-            <input
-              id="foodInput"
-              name="food"
-              type="text"
-              maxlength="24"
-              autocomplete="off"
-              placeholder="例如：牛肉饭"
-              required
-            />
+            <input id="foodInput" name="food" type="text" maxlength="24" autocomplete="off" placeholder="例如：牛肉饭" required="">
             <button id="saveButton" type="submit">添加</button>
           </div>
           <p class="form-hint" id="formHint">最多 24 个字符，重复名称会自动合并。</p>
@@ -877,17 +1005,63 @@
           <button id="clearButton" class="ghost-button danger" type="button">清空</button>
         </div>
 
-        <div class="food-list" id="foodList"></div>
+        <div class="food-list" id="foodList">
+              <div class="food-item">
+                <div class="food-name">干拌抄手</div>
+                <button class="icon-button" type="button" title="编辑 干拌抄手" aria-label="编辑 干拌抄手" data-action="edit" data-index="0">✎</button>
+                <button class="icon-button delete" type="button" title="删除 干拌抄手" aria-label="删除 干拌抄手" data-action="delete" data-index="0">×</button>
+              </div>
+            
+              <div class="food-item">
+                <div class="food-name">牛肉刀削面</div>
+                <button class="icon-button" type="button" title="编辑 牛肉刀削面" aria-label="编辑 牛肉刀削面" data-action="edit" data-index="1">✎</button>
+                <button class="icon-button delete" type="button" title="删除 牛肉刀削面" aria-label="删除 牛肉刀削面" data-action="delete" data-index="1">×</button>
+              </div>
+            
+              <div class="food-item">
+                <div class="food-name">端菜粉蒸肉</div>
+                <button class="icon-button" type="button" title="编辑 端菜粉蒸肉" aria-label="编辑 端菜粉蒸肉" data-action="edit" data-index="2">✎</button>
+                <button class="icon-button delete" type="button" title="删除 端菜粉蒸肉" aria-label="删除 端菜粉蒸肉" data-action="delete" data-index="2">×</button>
+              </div>
+            
+              <div class="food-item">
+                <div class="food-name">米线</div>
+                <button class="icon-button" type="button" title="编辑 米线" aria-label="编辑 米线" data-action="edit" data-index="3">✎</button>
+                <button class="icon-button delete" type="button" title="删除 米线" aria-label="删除 米线" data-action="delete" data-index="3">×</button>
+              </div>
+            
+              <div class="food-item">
+                <div class="food-name">脆皮五花肉</div>
+                <button class="icon-button" type="button" title="编辑 脆皮五花肉" aria-label="编辑 脆皮五花肉" data-action="edit" data-index="4">✎</button>
+                <button class="icon-button delete" type="button" title="删除 脆皮五花肉" aria-label="删除 脆皮五花肉" data-action="delete" data-index="4">×</button>
+              </div>
+            
+              <div class="food-item">
+                <div class="food-name">铁板烧</div>
+                <button class="icon-button" type="button" title="编辑 铁板烧" aria-label="编辑 铁板烧" data-action="edit" data-index="5">✎</button>
+                <button class="icon-button delete" type="button" title="删除 铁板烧" aria-label="删除 铁板烧" data-action="delete" data-index="5">×</button>
+              </div>
+            
+              <div class="food-item">
+                <div class="food-name">猪脚饭</div>
+                <button class="icon-button" type="button" title="编辑 猪脚饭" aria-label="编辑 猪脚饭" data-action="edit" data-index="6">✎</button>
+                <button class="icon-button delete" type="button" title="删除 猪脚饭" aria-label="删除 猪脚饭" data-action="delete" data-index="6">×</button>
+              </div>
+            </div>
       </section>
     </main>
 
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+    <div class="toast" id="toast" role="status" aria-live="polite">今天吃：干拌抄手</div>
+    <canvas id="confettiCanvas" aria-hidden="true" width="1290" height="2796"></canvas>
 
     <script>
       const STORAGE_KEY = "lunch-slot-foods-v1";
       const HISTORY_KEY = "lunch-slot-history-v1";
-      const BOARD_CELL_COUNT = 20;
+      const DESKTOP_BOARD_CELL_COUNT = 20;
+      const MOBILE_BOARD_CELL_COUNT = 16;
+      const FAST_SPIN_PROGRESS = 0.84;
+      const FAST_SPIN_DELAY = 21;
+      const FINAL_SPIN_DELAY = 240;
 
       const defaultFoods = [
         "干拌抄手",
@@ -1010,7 +1184,15 @@
           return [];
         }
 
-        return Array.from({ length: BOARD_CELL_COUNT }, (_, index) => state.foods[index % state.foods.length]);
+        return Array.from({ length: getBoardCellCount() }, (_, index) => state.foods[index % state.foods.length]);
+      }
+
+      function getBoardCellCount() {
+        const boardWidth = elements.board?.clientWidth || window.innerWidth;
+        if (boardWidth <= 430 || window.matchMedia("(max-width: 560px)").matches) {
+          return MOBILE_BOARD_CELL_COUNT;
+        }
+        return DESKTOP_BOARD_CELL_COUNT;
       }
 
       function getCellSymbol(index) {
@@ -1164,7 +1346,7 @@
         const total = boardFoods.length;
         const winnerIndex = Math.floor(Math.random() * total);
         const offset = (winnerIndex - state.activeIndex + total) % total;
-        const rounds = 4 + Math.floor(Math.random() * 3);
+        const rounds = 5 + Math.floor(Math.random() * 3);
         const totalSteps = rounds * total + offset;
         let step = 0;
 
@@ -1179,11 +1361,24 @@
           }
 
           const progress = step / totalSteps;
-          const delay = 34 + Math.pow(progress, 2.35) * 250;
+          const delay = getSpinDelay(progress);
           state.spinTimer = window.setTimeout(tick, delay);
         }
 
-        state.spinTimer = window.setTimeout(tick, 120);
+        state.spinTimer = window.setTimeout(tick, getSpinDelay(0));
+      }
+
+      function getSpinDelay(progress) {
+        const normalized = Math.min(Math.max(progress, 0), 1);
+        if (normalized < FAST_SPIN_PROGRESS) {
+          return Math.round(
+            FAST_SPIN_DELAY + normalized * 8 + Math.sin(normalized * Math.PI * 18) * 2
+          );
+        }
+
+        const slowProgress = (normalized - FAST_SPIN_PROGRESS) / (1 - FAST_SPIN_PROGRESS);
+        const eased = Math.pow(slowProgress, 2.6);
+        return Math.round(34 + eased * (FINAL_SPIN_DELAY - 34));
       }
 
       function finishSpin(winnerIndex) {
@@ -1310,10 +1505,16 @@
           stopEditing();
         }
       });
-      window.addEventListener("resize", resizeCanvas);
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        if (!state.spinning) {
+          render();
+        }
+      });
 
       resizeCanvas();
       render();
     </script>
-  </body>
-</html>
+  
+
+</body></html>
