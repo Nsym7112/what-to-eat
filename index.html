@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>午饭老虎机</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #090b0e;
+        --panel: rgba(255, 255, 255, 0.08);
+        --line: rgba(255, 255, 255, 0.14);
+        --text: #f7fbff;
+        --muted: #a9b7c3;
+        --accent: #ffd33d;
+        --accent-2: #ef3f35;
+        --accent-3: #3bd35c;
+        --cyan: #22b8e8;
+        --blue-screen: #0b65a9;
+        --danger: #ff7b7b;
+        --shadow: 0 28px 80px rgba(0, 0, 0, 0.58);
+        --radius: 6px;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 18% 12%, rgba(36, 184, 232, 0.18), transparent 32%),
+          radial-gradient(circle at 82% 20%, rgba(255, 211, 61, 0.14), transparent 30%),
+          linear-gradient(135deg, #06080b 0%, #111820 46%, #090b0e 100%);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .app-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 760px) minmax(320px, 0.75fr);
+        gap: 26px;
+        width: min(1240px, calc(100% - 32px));
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 40px 0;
+        align-items: center;
+      }
+
+      .machine-section,
+      .panel-section {
+        min-width: 0;
+      }
+
+      .title-block {
+        margin-bottom: 14px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: #62ddff;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        font-size: clamp(2.8rem, 7vw, 5.8rem);
+        line-height: 0.94;
+      }
+
+      h2 {
+        font-size: 1.45rem;
+      }
+
+      .subline {
+        max-width: 34rem;
+        margin: 14px 0 0;
+        color: var(--muted);
+        font-size: 1.02rem;
+        line-height: 1.7;
+      }
+
+      .slot-glass {
+        position: relative;
+        overflow: hidden;
+        padding: 12px;
+        border: 2px solid #050506;
+        border-radius: 10px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 7%),
+          linear-gradient(90deg, #070708, #21262a 9%, #070708 50%, #22282c 91%, #070708);
+        box-shadow:
+          var(--shadow),
+          inset 0 0 0 4px #191d20,
+          inset 0 0 0 8px #040506;
+      }
+
+      .slot-glass::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(115deg, rgba(255, 255, 255, 0.12), transparent 18%, transparent 82%, rgba(255, 255, 255, 0.08)),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 18px);
+      }
+
+      .slot-lights {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        gap: 8px;
+        margin: 6px 70px 10px;
+      }
+
+      .slot-lights span {
+        height: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.6);
+        border-radius: 3px;
+        background: linear-gradient(#33dcff, #056fa6);
+        box-shadow: 0 0 16px rgba(34, 184, 232, 0.85);
+        opacity: 0.8;
+      }
+
+      .slot-lights span:nth-child(even) {
+        background: linear-gradient(#ffe96b, #d99000);
+        box-shadow: 0 0 18px rgba(255, 211, 61, 0.8);
+      }
+
+      .slot-glass.spinning .slot-lights span {
+        animation: blink 420ms linear infinite alternate;
+      }
+
+      .slot-lights span:nth-child(2n) {
+        animation-delay: 150ms;
+      }
+
+      .machine-face {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 50px minmax(0, 1fr) 50px;
+        gap: 10px;
+        align-items: stretch;
+      }
+
+      .side-rail {
+        display: grid;
+        gap: 8px;
+        padding: 8px 5px;
+        border: 1px solid #050607;
+        border-radius: 5px;
+        background: linear-gradient(180deg, #11161a, #050607);
+        box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.07);
+      }
+
+      .rail-light {
+        display: grid;
+        min-height: 42px;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+        color: #ff3232;
+        background: linear-gradient(180deg, #22292d, #080a0c);
+        box-shadow: inset 0 0 9px rgba(0, 0, 0, 0.8);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.85rem;
+        font-weight: 900;
+        text-shadow: 0 0 10px rgba(255, 50, 50, 0.8);
+      }
+
+      .rail-light.blue {
+        color: #47d9ff;
+        text-shadow: 0 0 10px rgba(71, 217, 255, 0.9);
+      }
+
+      .rail-light.gold {
+        color: #ffdf54;
+        text-shadow: 0 0 10px rgba(255, 223, 84, 0.9);
+      }
+
+      .lottery-board {
+        position: relative;
+        width: min(100%, 650px);
+        aspect-ratio: 1;
+        margin: 0 auto;
+        border: 4px solid #050708;
+        border-radius: 7px;
+        background:
+          linear-gradient(180deg, rgba(11, 101, 169, 0.08), rgba(1, 30, 72, 0.28)),
+          #08111b;
+        box-shadow:
+          inset 0 0 0 3px #2f3b40,
+          inset 0 0 0 7px #111416,
+          0 12px 30px rgba(0, 0, 0, 0.42);
+      }
+
+      .lottery-board::before {
+        content: "";
+        position: absolute;
+        inset: 20%;
+        border: 2px solid rgba(127, 207, 255, 0.15);
+        border-radius: 8px;
+        background:
+          radial-gradient(circle at 30% 45%, rgba(255, 255, 255, 0.09), transparent 0 1px, transparent 2px),
+          radial-gradient(circle at 58% 30%, rgba(255, 255, 255, 0.08), transparent 0 2px, transparent 3px),
+          linear-gradient(135deg, rgba(38, 151, 222, 0.86), rgba(5, 77, 145, 0.96));
+        box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.26);
+        pointer-events: none;
+      }
+
+      .lottery-board::after {
+        content: "LUNCH TIME";
+        position: absolute;
+        left: 50%;
+        top: 35%;
+        color: rgba(255, 255, 255, 0.09);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: clamp(1.3rem, 4vw, 2.8rem);
+        font-weight: 900;
+        transform: translate(-50%, -50%) rotate(-8deg);
+        pointer-events: none;
+      }
+
+      .marquee-cell {
+        position: absolute;
+        display: grid;
+        grid-template-rows: 1fr auto;
+        width: clamp(72px, 14.8%, 96px);
+        min-height: clamp(58px, 8.8vw, 72px);
+        place-items: center;
+        padding: 7px 8px;
+        border: 2px solid rgba(255, 255, 255, 0.78);
+        border-radius: 6px;
+        color: #081018;
+        background: linear-gradient(145deg, #f7f06b, #f2b82b);
+        box-shadow:
+          inset 0 0 0 1px rgba(0, 0, 0, 0.18),
+          inset 0 9px 10px rgba(255, 255, 255, 0.45),
+          0 10px 18px rgba(0, 0, 0, 0.38);
+        font-size: clamp(0.72rem, 1.6vw, 0.9rem);
+        font-weight: 900;
+        line-height: 1.05;
+        text-align: center;
+        transform: translate(-50%, -50%);
+        transition:
+          transform 90ms ease,
+          background 90ms ease,
+          border-color 90ms ease,
+          box-shadow 90ms ease;
+        word-break: break-word;
+      }
+
+      .marquee-cell.tone-1 {
+        background: linear-gradient(145deg, #68e773, #229a32);
+      }
+
+      .marquee-cell.tone-2 {
+        background: linear-gradient(145deg, #55ddff, #057fb4);
+        color: #07121a;
+      }
+
+      .marquee-cell.tone-3 {
+        background: linear-gradient(145deg, #ff6b59, #c51622);
+        color: #fff8df;
+      }
+
+      .marquee-cell.tone-4 {
+        background: linear-gradient(145deg, #fdfefe, #d9e7ef);
+      }
+
+      .cell-symbol {
+        display: grid;
+        width: 34px;
+        height: 26px;
+        place-items: center;
+        border: 2px solid rgba(0, 0, 0, 0.45);
+        border-radius: 999px;
+        color: #d51414;
+        background: radial-gradient(circle at 35% 30%, #fff799, #ff3a2b 55%, #a2070d);
+        box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.52);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.88rem;
+        font-weight: 1000;
+      }
+
+      .marquee-cell.tone-1 .cell-symbol {
+        color: #096a18;
+        background: radial-gradient(circle at 35% 30%, #efffe8, #74ea31 58%, #158b24);
+      }
+
+      .marquee-cell.tone-2 .cell-symbol {
+        color: #073a5a;
+        background: radial-gradient(circle at 35% 30%, #f3ffff, #43d4ff 58%, #0878b3);
+      }
+
+      .marquee-cell.tone-3 .cell-symbol {
+        color: #671000;
+        background: radial-gradient(circle at 35% 30%, #fff2af, #ffbd18 58%, #cd5c00);
+      }
+
+      .marquee-cell.tone-4 .cell-symbol {
+        border-radius: 4px;
+        color: #111;
+        background: linear-gradient(#111, #333);
+      }
+
+      .cell-name {
+        max-width: 100%;
+        overflow: hidden;
+        color: inherit;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .marquee-cell.active {
+        z-index: 2;
+        border-color: #fff7ad;
+        color: #17120a;
+        box-shadow:
+          inset 0 0 0 2px rgba(255, 255, 255, 0.75),
+          0 0 0 4px rgba(255, 233, 88, 0.35),
+          0 0 28px rgba(255, 232, 69, 0.95),
+          0 18px 34px rgba(0, 0, 0, 0.42);
+        transform: translate(-50%, -50%) scale(1.08);
+      }
+
+      .board-center {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        top: 50%;
+        display: grid;
+        width: min(42%, 230px);
+        min-height: 132px;
+        place-items: center;
+        padding: 16px;
+        border: 3px solid #d8efff;
+        border-radius: 8px;
+        background: linear-gradient(180deg, rgba(6, 70, 125, 0.96), rgba(4, 35, 81, 0.98));
+        box-shadow:
+          0 0 0 4px rgba(0, 0, 0, 0.5),
+          inset 0 0 18px rgba(21, 187, 255, 0.34);
+        transform: translate(-50%, -50%);
+      }
+
+      .center-status {
+        margin: 0 0 10px;
+        color: #e8f7ff;
+        font-size: 0.9rem;
+        font-weight: 800;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(95, 218, 255, 0.8);
+      }
+
+      .slot-footer {
+        position: relative;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 10px 0;
+        padding: 10px 12px;
+        border: 1px solid #060708;
+        border-radius: 6px;
+        background: linear-gradient(180deg, #181f24, #07090b);
+      }
+
+      .label {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      #winnerText {
+        display: block;
+        max-width: 30ch;
+        color: #ff3030;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 1.55rem;
+        overflow-wrap: anywhere;
+        text-shadow: 0 0 12px rgba(255, 48, 48, 0.72);
+      }
+
+      .spin-button,
+      .food-form button {
+        min-height: 48px;
+        border: 0;
+        border-radius: var(--radius);
+        color: #17120a;
+        background: linear-gradient(180deg, #fff67c, #ffb21d 48%, #e37700);
+        box-shadow:
+          inset 0 2px 0 rgba(255, 255, 255, 0.65),
+          0 10px 22px rgba(255, 178, 29, 0.28);
+        font-weight: 900;
+      }
+
+      .spin-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        flex: 0 0 auto;
+        padding: 0 20px;
+      }
+
+      .score-strip {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+        margin: 10px 60px 0;
+        padding: 8px;
+        border: 1px solid #050607;
+        border-radius: 5px;
+        background: linear-gradient(180deg, #d8eec7, #7da76f);
+      }
+
+      .score-cell {
+        display: grid;
+        min-height: 42px;
+        place-items: center;
+        border-radius: 4px;
+        color: #13220f;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(197, 229, 163, 0.88));
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-weight: 1000;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+      }
+
+      .spin-button:disabled,
+      .food-form button:disabled {
+        cursor: not-allowed;
+        opacity: 0.58;
+      }
+
+      .button-icon {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+      }
+
+      .result-strip {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+        min-height: 40px;
+        margin-top: 18px;
+        color: var(--muted);
+      }
+
+      .history-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .history-chip,
+      .count-pill {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text);
+      }
+
+      .history-chip {
+        padding: 7px 10px;
+        font-size: 0.88rem;
+      }
+
+      .panel-section {
+        padding: 22px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(10, 11, 13, 0.58);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .panel-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      .count-pill {
+        flex: 0 0 auto;
+        padding: 7px 11px;
+        font-size: 0.86rem;
+        font-weight: 800;
+      }
+
+      .food-form {
+        display: grid;
+        gap: 9px;
+      }
+
+      .food-form label {
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .input-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 84px;
+        gap: 10px;
+      }
+
+      .input-row input {
+        width: 100%;
+        min-height: 48px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        outline: 0;
+        padding: 0 14px;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .input-row input:focus {
+        border-color: rgba(255, 207, 74, 0.7);
+        box-shadow: 0 0 0 3px rgba(255, 207, 74, 0.16);
+      }
+
+      .form-hint {
+        min-height: 20px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 10px;
+        margin: 18px 0;
+      }
+
+      .ghost-button {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 0 12px;
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.07);
+        font-weight: 700;
+      }
+
+      .ghost-button.danger {
+        color: var(--danger);
+      }
+
+      .food-list {
+        display: grid;
+        gap: 10px;
+        max-height: min(48vh, 520px);
+        overflow: auto;
+        padding-right: 4px;
+      }
+
+      .food-item {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: 8px;
+        align-items: center;
+        min-height: 48px;
+        padding: 8px 8px 8px 13px;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: var(--radius);
+        background: rgba(255, 255, 255, 0.065);
+      }
+
+      .food-name {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font-weight: 800;
+      }
+
+      .icon-button {
+        display: grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.13);
+        border-radius: var(--radius);
+        color: var(--text);
+        background: rgba(0, 0, 0, 0.18);
+      }
+
+      .icon-button.delete {
+        color: var(--danger);
+      }
+
+      .empty-state {
+        padding: 26px 18px;
+        border: 1px dashed rgba(255, 255, 255, 0.22);
+        border-radius: var(--radius);
+        color: var(--muted);
+        text-align: center;
+      }
+
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        z-index: 4;
+        min-width: min(320px, calc(100vw - 32px));
+        max-width: calc(100vw - 32px);
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--text);
+        background: rgba(12, 13, 15, 0.92);
+        box-shadow: var(--shadow);
+        opacity: 0;
+        transform: translate(-50%, 18px);
+        transition: opacity 180ms ease, transform 180ms ease;
+        pointer-events: none;
+      }
+
+      .toast.show {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      #confettiCanvas {
+        position: fixed;
+        inset: 0;
+        z-index: 3;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      @keyframes blink {
+        from {
+          opacity: 0.45;
+          transform: scaleX(0.82);
+        }
+        to {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+      }
+
+      @media (max-width: 860px) {
+        .app-shell {
+          grid-template-columns: 1fr;
+          align-items: start;
+          padding: 26px 0;
+        }
+
+        .slot-footer,
+        .result-strip {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .spin-button {
+          justify-content: center;
+          width: 100%;
+        }
+
+        .panel-section {
+          padding: 18px;
+        }
+
+        .food-list {
+          max-height: none;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .app-shell {
+          width: min(100% - 22px, 1180px);
+        }
+
+        .slot-glass {
+          padding: 10px;
+        }
+
+        .slot-lights {
+          gap: 5px;
+          margin: 4px 42px 8px;
+        }
+
+        .machine-face {
+          grid-template-columns: 32px minmax(0, 1fr) 32px;
+          gap: 6px;
+        }
+
+        .side-rail {
+          gap: 5px;
+          padding: 5px 3px;
+        }
+
+        .rail-light {
+          min-height: 30px;
+          font-size: 0.58rem;
+        }
+
+        .marquee-cell {
+          width: clamp(52px, 22%, 68px);
+          min-height: 44px;
+          padding: 5px 6px;
+          font-size: 0.66rem;
+        }
+
+        .cell-symbol {
+          width: 28px;
+          height: 20px;
+          font-size: 0.68rem;
+        }
+
+        .board-center {
+          width: min(46%, 142px);
+          min-height: 94px;
+          padding: 10px;
+        }
+
+        .center-status {
+          margin-bottom: 8px;
+          font-size: 0.76rem;
+        }
+
+        .score-strip {
+          gap: 4px;
+          margin: 8px 38px 0;
+          padding: 5px;
+        }
+
+        .score-cell {
+          min-height: 28px;
+          font-size: 0.72rem;
+        }
+
+        .input-row {
+          grid-template-columns: 1fr;
+        }
+
+        .food-form button {
+          width: 100%;
+        }
+
+        .food-item {
+          grid-template-columns: minmax(0, 1fr) 34px 34px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="machine-section" aria-labelledby="app-title">
+        <div class="title-block">
+          <p class="eyebrow">Lunch Picker</p>
+          <!-- <h1 id="app-title">午饭老虎机</h1> -->
+          <p class="subline">让高亮沿着一圈候选项奔跑，最后停在今天的午饭。</p>
+        </div>
+
+        <div class="slot-wrap" aria-live="polite">
+          <div class="slot-glass">
+            <div class="slot-lights" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="machine-face">
+              <div class="side-rail" aria-hidden="true">
+                <span class="rail-light blue">HI</span>
+                <span class="rail-light">77</span>
+                <span class="rail-light gold">STAR</span>
+                <span class="rail-light">BAR</span>
+                <span class="rail-light blue">GO</span>
+                <span class="rail-light">15</span>
+              </div>
+              <div class="lottery-board" id="lotteryBoard">
+                <div class="board-center">
+                  <p class="center-status" id="centerStatus">准备开饭</p>
+                  <button id="spinButton" class="spin-button" type="button">
+                    <span class="button-icon" aria-hidden="true">▶</span>
+                    开始抽取
+                  </button>
+                </div>
+              </div>
+              <div class="side-rail" aria-hidden="true">
+                <span class="rail-light">77</span>
+                <span class="rail-light blue">ON</span>
+                <span class="rail-light gold">WIN</span>
+                <span class="rail-light">BAR</span>
+                <span class="rail-light blue">MAX</span>
+                <span class="rail-light">88</span>
+              </div>
+            </div>
+            <div class="score-strip" aria-hidden="true">
+              <span class="score-cell">50</span>
+              <span class="score-cell">20</span>
+              <span class="score-cell">20</span>
+              <span class="score-cell">15</span>
+              <span class="score-cell">10</span>
+              <span class="score-cell">10</span>
+              <span class="score-cell">10</span>
+              <span class="score-cell">5</span>
+            </div>
+            <div class="slot-footer">
+              <div>
+                <span class="label">今日结果</span>
+                <strong id="winnerText">还没抽</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-strip" id="resultStrip">
+          <span>最近记录</span>
+          <div id="historyList" class="history-list"></div>
+        </div>
+      </section>
+
+      <section class="panel-section" aria-labelledby="food-panel-title">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Menu Pool</p>
+            <h2 id="food-panel-title">候选食物</h2>
+          </div>
+          <span class="count-pill" id="countPill">0 项</span>
+        </div>
+
+        <form class="food-form" id="foodForm">
+          <label for="foodInput">添加或编辑食物</label>
+          <div class="input-row">
+            <input
+              id="foodInput"
+              name="food"
+              type="text"
+              maxlength="24"
+              autocomplete="off"
+              placeholder="例如：牛肉饭"
+              required
+            />
+            <button id="saveButton" type="submit">添加</button>
+          </div>
+          <p class="form-hint" id="formHint">最多 24 个字符，重复名称会自动合并。</p>
+        </form>
+
+        <div class="toolbar" aria-label="列表操作">
+          <button id="resetButton" class="ghost-button" type="button">恢复默认</button>
+          <button id="clearButton" class="ghost-button danger" type="button">清空</button>
+        </div>
+
+        <div class="food-list" id="foodList"></div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+    <script>
+      const STORAGE_KEY = "lunch-slot-foods-v1";
+      const HISTORY_KEY = "lunch-slot-history-v1";
+      const BOARD_CELL_COUNT = 20;
+
+      const defaultFoods = [
+        "干拌抄手",
+        "牛肉刀削面",
+        "端菜粉蒸肉",
+        "米线",
+        "脆皮五花肉",
+        "铁板烧",
+        "猪脚饭"
+      ];
+
+      const state = {
+        foods: loadList(STORAGE_KEY, defaultFoods),
+        history: loadList(HISTORY_KEY, []),
+        activeIndex: 0,
+        spinTimer: 0,
+        editingIndex: -1,
+        spinning: false,
+        toastTimer: 0
+      };
+
+      const elements = {
+        board: document.querySelector("#lotteryBoard"),
+        centerStatus: document.querySelector("#centerStatus"),
+        slotGlass: document.querySelector(".slot-glass"),
+        spinButton: document.querySelector("#spinButton"),
+        winnerText: document.querySelector("#winnerText"),
+        foodForm: document.querySelector("#foodForm"),
+        foodInput: document.querySelector("#foodInput"),
+        saveButton: document.querySelector("#saveButton"),
+        formHint: document.querySelector("#formHint"),
+        foodList: document.querySelector("#foodList"),
+        countPill: document.querySelector("#countPill"),
+        resetButton: document.querySelector("#resetButton"),
+        clearButton: document.querySelector("#clearButton"),
+        historyList: document.querySelector("#historyList"),
+        toast: document.querySelector("#toast"),
+        canvas: document.querySelector("#confettiCanvas")
+      };
+
+      const ctx = elements.canvas.getContext("2d");
+      let confettiPieces = [];
+      let confettiFrame = 0;
+
+      function loadList(key, fallback) {
+        try {
+          const saved = JSON.parse(localStorage.getItem(key));
+          if (!Array.isArray(saved)) {
+            return [...fallback];
+          }
+          return saved
+            .map((item) => String(item).trim())
+            .filter(Boolean)
+            .slice(0, 80);
+        } catch {
+          return [...fallback];
+        }
+      }
+
+      function saveFoods() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.foods));
+      }
+
+      function saveHistory() {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(state.history));
+      }
+
+      function normalizeFood(value) {
+        return value.replace(/\s+/g, " ").trim();
+      }
+
+      function render() {
+        renderFoods();
+        renderHistory();
+        elements.countPill.textContent = `${state.foods.length} 项`;
+        elements.spinButton.disabled = state.spinning || state.foods.length === 0;
+        if (state.foods.length === 0) {
+          state.activeIndex = 0;
+          renderBoard();
+          elements.centerStatus.textContent = "先加点吃的";
+          elements.winnerText.textContent = "列表为空";
+        } else if (!state.spinning) {
+          const boardFoods = getBoardFoods();
+          const savedWinnerIndex = boardFoods.indexOf(state.history[0]);
+          if (savedWinnerIndex >= 0 && elements.winnerText.textContent === "还没抽") {
+            state.activeIndex = savedWinnerIndex;
+            elements.winnerText.textContent = state.history[0];
+          }
+          if (state.activeIndex >= boardFoods.length) {
+            state.activeIndex = savedWinnerIndex >= 0 ? savedWinnerIndex : 0;
+          }
+          renderBoard();
+          elements.centerStatus.textContent = savedWinnerIndex >= 0 ? "就吃这个" : "准备开饭";
+        }
+      }
+
+      function renderBoard() {
+        elements.board.querySelectorAll(".marquee-cell").forEach((cell) => cell.remove());
+        if (state.foods.length === 0) {
+          return;
+        }
+
+        getBoardFoods().forEach((food, index, boardFoods) => {
+          const position = getPerimeterPosition(index, boardFoods.length);
+          const cell = document.createElement("div");
+          cell.className = `marquee-cell tone-${index % 5}${index === state.activeIndex ? " active" : ""}`;
+          cell.innerHTML = `
+            <span class="cell-symbol">${getCellSymbol(index)}</span>
+            <span class="cell-name">${escapeHtml(food)}</span>
+          `;
+          cell.style.left = `${position.x}%`;
+          cell.style.top = `${position.y}%`;
+          cell.dataset.index = String(index);
+          elements.board.appendChild(cell);
+        });
+      }
+
+      function getBoardFoods() {
+        if (state.foods.length === 0) {
+          return [];
+        }
+
+        return Array.from({ length: BOARD_CELL_COUNT }, (_, index) => state.foods[index % state.foods.length]);
+      }
+
+      function getCellSymbol(index) {
+        const symbols = ["77", "BAR", "X2", "15", "WIN"];
+        return symbols[index % symbols.length];
+      }
+
+      function getPerimeterPosition(index, total) {
+        const inset = 10;
+        const span = 100 - inset * 2;
+        const point = (x, y) => ({ x: inset + x * span, y: inset + y * span });
+
+        if (total <= 1) {
+          return point(0.5, 0);
+        }
+
+        const distance = (index / total) * 400;
+        if (distance < 100) {
+          return point(distance / 100, 0);
+        }
+        if (distance < 200) {
+          return point(1, (distance - 100) / 100);
+        }
+        if (distance < 300) {
+          return point((300 - distance) / 100, 1);
+        }
+        return point(0, (400 - distance) / 100);
+      }
+
+      function updateActiveCell() {
+        elements.board.querySelectorAll(".marquee-cell").forEach((cell) => {
+          cell.classList.toggle("active", Number(cell.dataset.index) === state.activeIndex);
+        });
+      }
+
+      function renderFoods() {
+        if (state.foods.length === 0) {
+          elements.foodList.innerHTML = '<div class="empty-state">还没有候选项，先添加几个午饭选择。</div>';
+          return;
+        }
+
+        elements.foodList.innerHTML = state.foods
+          .map(
+            (food, index) => `
+              <div class="food-item">
+                <div class="food-name">${escapeHtml(food)}</div>
+                <button class="icon-button" type="button" title="编辑 ${escapeHtml(food)}" aria-label="编辑 ${escapeHtml(food)}" data-action="edit" data-index="${index}">✎</button>
+                <button class="icon-button delete" type="button" title="删除 ${escapeHtml(food)}" aria-label="删除 ${escapeHtml(food)}" data-action="delete" data-index="${index}">×</button>
+              </div>
+            `
+          )
+          .join("");
+      }
+
+      function renderHistory() {
+        if (!state.history.length) {
+          elements.historyList.innerHTML = '<span class="history-chip">暂无</span>';
+          return;
+        }
+        elements.historyList.innerHTML = state.history
+          .slice(0, 5)
+          .map((item) => `<span class="history-chip">${escapeHtml(item)}</span>`)
+          .join("");
+      }
+
+      function addOrUpdateFood(event) {
+        event.preventDefault();
+        if (state.spinning) {
+          showToast("抽取中，稍后再编辑");
+          return;
+        }
+
+        const food = normalizeFood(elements.foodInput.value);
+        if (!food) {
+          showToast("请输入一个食物名称");
+          return;
+        }
+
+        const existingIndex = state.foods.findIndex((item) => item.toLowerCase() === food.toLowerCase());
+        if (state.editingIndex >= 0) {
+          if (existingIndex >= 0 && existingIndex !== state.editingIndex) {
+            state.foods.splice(state.editingIndex, 1);
+            showToast("已合并重复食物");
+          } else {
+            state.foods[state.editingIndex] = food;
+            showToast("已更新");
+          }
+          stopEditing();
+        } else if (existingIndex >= 0) {
+          showToast("这个食物已经在列表里");
+          elements.foodInput.value = "";
+        } else {
+          state.foods.unshift(food);
+          elements.foodInput.value = "";
+          showToast("已添加");
+        }
+
+        saveFoods();
+        render();
+      }
+
+      function handleFoodListClick(event) {
+        const button = event.target.closest("button[data-action]");
+        if (!button || state.spinning) {
+          return;
+        }
+
+        const index = Number(button.dataset.index);
+        if (!Number.isInteger(index) || !state.foods[index]) {
+          return;
+        }
+
+        if (button.dataset.action === "edit") {
+          state.editingIndex = index;
+          elements.foodInput.value = state.foods[index];
+          elements.foodInput.focus();
+          elements.saveButton.textContent = "保存";
+          elements.formHint.textContent = "正在编辑，按 Esc 可以取消。";
+        }
+
+        if (button.dataset.action === "delete") {
+          const [removed] = state.foods.splice(index, 1);
+          if (state.editingIndex === index) {
+            stopEditing();
+          }
+          saveFoods();
+          render();
+          showToast(`已删除：${removed}`);
+        }
+      }
+
+      function stopEditing() {
+        state.editingIndex = -1;
+        elements.foodInput.value = "";
+        elements.saveButton.textContent = "添加";
+        elements.formHint.textContent = "最多 24 个字符，重复名称会自动合并。";
+      }
+
+      function spin() {
+        if (state.spinning || state.foods.length === 0) {
+          return;
+        }
+
+        state.spinning = true;
+        elements.spinButton.disabled = true;
+        elements.slotGlass.classList.add("spinning");
+        elements.centerStatus.textContent = "奔跑中";
+        elements.winnerText.textContent = "滚动中...";
+
+        const boardFoods = getBoardFoods();
+        const total = boardFoods.length;
+        const winnerIndex = Math.floor(Math.random() * total);
+        const offset = (winnerIndex - state.activeIndex + total) % total;
+        const rounds = 4 + Math.floor(Math.random() * 3);
+        const totalSteps = rounds * total + offset;
+        let step = 0;
+
+        function tick() {
+          step += 1;
+          state.activeIndex = (state.activeIndex + 1) % total;
+          updateActiveCell();
+
+          if (step >= totalSteps) {
+            finishSpin(winnerIndex);
+            return;
+          }
+
+          const progress = step / totalSteps;
+          const delay = 34 + Math.pow(progress, 2.35) * 250;
+          state.spinTimer = window.setTimeout(tick, delay);
+        }
+
+        state.spinTimer = window.setTimeout(tick, 120);
+      }
+
+      function finishSpin(winnerIndex) {
+        window.clearTimeout(state.spinTimer);
+        state.activeIndex = winnerIndex;
+        updateActiveCell();
+
+        const winner = getBoardFoods()[winnerIndex];
+        state.spinning = false;
+        elements.slotGlass.classList.remove("spinning");
+        elements.centerStatus.textContent = "就吃这个";
+        elements.winnerText.textContent = winner;
+        state.history = [winner, ...state.history.filter((item) => item !== winner)].slice(0, 8);
+        saveHistory();
+        render();
+        launchConfetti();
+        showToast(`今天吃：${winner}`);
+      }
+
+      function pickRandom(list) {
+        return list[Math.floor(Math.random() * list.length)];
+      }
+
+      function resetDefaults() {
+        if (state.spinning) {
+          showToast("抽取中，稍后再恢复默认");
+          return;
+        }
+
+        state.foods = [...defaultFoods];
+        stopEditing();
+        saveFoods();
+        render();
+        showToast("已恢复默认候选项");
+      }
+
+      function clearFoods() {
+        if (state.spinning) {
+          showToast("抽取中，稍后再清空");
+          return;
+        }
+
+        state.foods = [];
+        stopEditing();
+        saveFoods();
+        render();
+        showToast("已清空候选项");
+      }
+
+      function showToast(message) {
+        window.clearTimeout(state.toastTimer);
+        elements.toast.textContent = message;
+        elements.toast.classList.add("show");
+        state.toastTimer = window.setTimeout(() => {
+          elements.toast.classList.remove("show");
+        }, 1800);
+      }
+
+      function launchConfetti() {
+        resizeCanvas();
+        const colors = ["#ffcf4a", "#ff6f61", "#4bc7b0", "#f8f4ee"];
+        confettiPieces = Array.from({ length: 110 }, () => ({
+          x: Math.random() * elements.canvas.width,
+          y: -20 - Math.random() * elements.canvas.height * 0.35,
+          size: 4 + Math.random() * 8,
+          speed: 2.2 + Math.random() * 4.4,
+          drift: -1.6 + Math.random() * 3.2,
+          rotation: Math.random() * Math.PI,
+          spin: -0.16 + Math.random() * 0.32,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        }));
+        cancelAnimationFrame(confettiFrame);
+        animateConfetti();
+      }
+
+      function animateConfetti() {
+        ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+        confettiPieces.forEach((piece) => {
+          piece.y += piece.speed;
+          piece.x += piece.drift;
+          piece.rotation += piece.spin;
+          ctx.save();
+          ctx.translate(piece.x, piece.y);
+          ctx.rotate(piece.rotation);
+          ctx.fillStyle = piece.color;
+          ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size * 0.58);
+          ctx.restore();
+        });
+        confettiPieces = confettiPieces.filter((piece) => piece.y < elements.canvas.height + 30);
+        if (confettiPieces.length) {
+          confettiFrame = requestAnimationFrame(animateConfetti);
+        } else {
+          ctx.clearRect(0, 0, elements.canvas.width, elements.canvas.height);
+        }
+      }
+
+      function resizeCanvas() {
+        const ratio = window.devicePixelRatio || 1;
+        elements.canvas.width = Math.floor(window.innerWidth * ratio);
+        elements.canvas.height = Math.floor(window.innerHeight * ratio);
+        ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (char) => {
+          const entities = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+          };
+          return entities[char];
+        });
+      }
+
+      elements.foodForm.addEventListener("submit", addOrUpdateFood);
+      elements.foodList.addEventListener("click", handleFoodListClick);
+      elements.spinButton.addEventListener("click", spin);
+      elements.resetButton.addEventListener("click", resetDefaults);
+      elements.clearButton.addEventListener("click", clearFoods);
+      elements.foodInput.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && state.editingIndex >= 0) {
+          stopEditing();
+        }
+      });
+      window.addEventListener("resize", resizeCanvas);
+
+      resizeCanvas();
+      render();
+    </script>
+  </body>
+</html>
